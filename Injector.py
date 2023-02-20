@@ -4,9 +4,6 @@ from tkinter import ttk
 from tkinter import messagebox
 
 def get_processes():
-    """
-    Returns a list of currently running processes.
-    """
     processes = []
     for proc in psutil.process_iter(['pid', 'name']):
         try:
@@ -16,10 +13,6 @@ def get_processes():
     return processes
 
 class ProcessSelector(tk.Toplevel):
-    """
-    A GUI window that displays a list of running processes and allows the user
-    to select one.
-    """
     def __init__(self, parent, processes):
         super().__init__(parent)
         self.title('Select a Process')
@@ -37,9 +30,6 @@ class ProcessSelector(tk.Toplevel):
         select_button.pack(pady=5)
 
     def select_process(self):
-        """
-        Gets the selected process and passes it to the parent window.
-        """
         selection = self.process_listbox.get(self.process_listbox.curselection())
         pid = int(selection.split(':')[0])
         name = selection.split(':')[1].strip()
@@ -47,9 +37,6 @@ class ProcessSelector(tk.Toplevel):
         self.destroy()
 
 class GUI(tk.Tk):
-    """
-    The main GUI window.
-    """
     def __init__(self):
         super().__init__()
         self.title('DLL Injector')
@@ -72,9 +59,6 @@ class GUI(tk.Tk):
         inject_button.pack(pady=10)
 
     def select_process(self):
-        """
-        Displays a ProcessSelector window and waits for the user to select a process.
-        """
         processes = get_processes()
         selector = ProcessSelector(self, processes)
         self.wait_window(selector)
@@ -82,9 +66,6 @@ class GUI(tk.Tk):
             self.process_button.configure(text=f'{self.selected_process[0]}: {self.selected_process[1]}')
 
     def inject_dll(self):
-        """
-        Injects the selected DLL into the selected process.
-        """
         if self.selected_process is None:
             tk.messagebox.showerror('Error', 'Please select a process.')
             return
