@@ -2,6 +2,8 @@ import psutil
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import ctypes
+import os
 
 def get_processes():
     processes = []
@@ -72,8 +74,18 @@ class GUI(tk.Tk):
         if not self.dll_path.get():
             tk.messagebox.showerror('Error', 'Please enter a DLL path.')
             return
-        # will be implimented soon
-        print('injected')
+
+        process_id, process_name = self.selected_process
+        dll_path = self.dll_path.get()
+
+        try:
+            inject_dll(process_id, dll_path)
+        except Exception as e:
+            tk.messagebox.showerror('Error', str(e))
+            return
+
+        tk.messagebox.showinfo('Success', f'{os.path.basename(dll_path)} has been injected into {process_name} (PID: {process_id})')
+
 
 if __name__ == '__main__':
     gui = GUI()
